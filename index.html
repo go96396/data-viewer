@@ -21,8 +21,44 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <h1>Hello, w<span class="glyphicon glyphicon-heart-empty" style="font-size:60%"></span>rld!</h1>
-        <p class="lead">This is Squared Paper, an amalgamtaion of boilerplate code by <a href="http://twitter.com/jeshuamaxey">Jeshua Maxey</a>.</p>
+
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <a class="navbar-brand" href="#">Data Monitor</a>
+
+            <button id="startDataMonitoring" class="btn btn-success navbar-btn">Start</button>
+            <button id="stopDataMonitoring" class="btn btn-danger navbar-btn">Stop</button>
+
+            <div class="navbar-form navbar-left update-url">
+              <div class="form-group">
+                <input id="dataURL" type="text" class="form-control" placeholder="URL">
+              </div>
+              <button id="updateURL" class="btn btn-primary navbar-btn">Update data source</button>
+            </div>
+            <button id="clearData" class="btn btn-warning navbar-btn">Clear data</button>
+
+            <div class="navbar-form navbar-left update-url">
+              <div class="form-group">
+                <input id="interval" type="number" class="form-control" value="2.0" step="0.2" min="0.2">
+              </div>
+              <button id="updateInterval" class="btn btn-primary navbar-btn">Update refresh interval</button>
+            </div>
+
+        </nav>
+
+        <pre id="data" class="data"></pre>
+
+        <div id="welcome" class="jumbotron">
+            Set me going and I'll periodically show you changes to your data
+        </div>
+
+        <div id="alert" class="alert"></div>
+
+        <!--
+        <dialog>
+            <h1>Oops!</h1>
+            <p>We were unable to load data source <code id="data-source">test.json</code> you specified.</p>
+        </dialog>
+        -->
 
         <!-- javascript -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>

@@ -4066,6 +4066,39 @@ th.visible-print, td.visible-print {
 /* This beautiful CSS-File has been crafted with LESS (lesscss.org) and compiled by simpLESS (wearekiss.com/simpless) */
 /* =Global
 ----------------------------------------------- */
+body {
+  padding-top: 70px; }
+
+.update-url {
+  max-width: 200px;
+  display: inline; }
+  .update-url .form-group {
+    display: inline; }
+    .update-url .form-group input {
+      max-width: 300px;
+      margin-top: 7px; }
+      .update-url .form-group input#interval {
+        max-width: 70px; }
+
+.data {
+  display: none; }
+
+.alert {
+  display: none; }
+
+dialog {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); }
+
+dialog::backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8); }
+
 /* =Media Queries / Responsive Styles Imports
 ----------------------------------------------- */
 /*
