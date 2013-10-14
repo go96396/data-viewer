@@ -54,6 +54,10 @@ body {
 	display: none;
 }
 
+select.data-format {
+	max-width: 100px;
+}
+
 //
 dialog {
   border: 1px solid rgba(0, 0, 0, 0.3);

@@ -35,7 +35,7 @@ app.startDataMonitoring = function() {
 //stop monitoring the data source
 app.stopDataMonitoring = function() {
 	clearInterval(app.interval);
-	$('pre#data').show();
+	$('#data').show();
 	app.running = false;
 };
 
@@ -47,14 +47,14 @@ app.updateInterval = function() {
 
 //empty the pre of data
 app.clearData = function() {
-	$('pre#data').html('').hide();
+	$('#data').html('').hide();
 };
 
 //load the data with an ajax request
 app.loadData = function() {
 	$.ajax({
-    url : app.dataURL || 'sample-data/outbound.csv',
-    type: 'GET',
+    url : app.dataURL || 'sample-data/sample.csv',
+    type: 'GET'
   })
   .done(app.processData)
   .fail(app.ajaxError);
@@ -62,9 +62,15 @@ app.loadData = function() {
 
 //process the data once loaded
 app.processData = function(data) {
-	//output data to the <pre>
-	$('pre#data').html(data);
-	$('pre#data').show();
+	if($('#data-format').val() == 'csv') {
+		app.formatAsCSV(data)
+	} else {
+		//output raw data in a <pre>
+		$('#data').html('<pre>'+data+'</pre>');
+	}
+
+	$('#data').show();
+
 	//log data if we want to
 	if(app.logData) {
 		console.log(data);
@@ -86,11 +92,11 @@ app.ajaxError = function(err) {
 app.restartInterval = function() {
 	app.stopDataMonitoring();
 	app.startDataMonitoring();
-}
+};
 
 //
 app.hideAlert = function() {
-	$('#alert').hide()
+	$('#alert').hide();
 };
 
 //
@@ -100,6 +106,23 @@ app.showAlert = function(msg) {
 		$('#alert').html(msg);
 	}
 	$('#alert').show();
+};
+
+//
+app.formatAsCSV = function(data) {
+	var arr2d = $.csv.toArrays(data);
+	$('#data').html('<table class="table" ><thead></thead><tbody></tbody></table>');
+	$('.table thead').append('<tr><tr>');
+	for (i=0; i < arr2d[0].length; i++) {
+		$('.table thead tr').append('<th>'+arr2d[0][i]+'</th>');
+	}
+	//i starts at 1 because the 0th is the table header
+	for (i=1; i < arr2d.length; i++) {
+		$('.table tbody').append('<tr></tr>');
+		for (j=0; j < arr2d[i].length; j++) {
+			$('.table tbody tr:last-of-type').append('<td>'+arr2d[i][j]+'</td>');
+		}
+	}
 };
 
 /*
