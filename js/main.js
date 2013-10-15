@@ -62,15 +62,25 @@ app.loadData = function() {
 
 //process the data once loaded
 app.processData = function(data) {
-	if($('#data-format').val() == 'csv') {
-		app.formatAsCSV(data)
-	} else {
-		//output raw data in a <pre>
-		$('#data').html('<pre>'+data+'</pre>');
+	//create empty array to fill with data if needed
+	var arr2d = [];
+	//process data accordingly
+	switch($('#data-format').val()) {
+		case 'csv':
+			arr2d = app.parseCSV(data);
+			app.createTable(arr2d);
+			break;
+		case 'tsv':
+			arr2d = app.parseTSV(data);
+			app.createTable(arr2d);
+			break;
+		case 'raw':
+		default: //output raw data in a <pre>
+			$('#data').html('<pre>'+data+'</pre>');
+			break;
 	}
-
+	//make the data visible once processed
 	$('#data').show();
-
 	//log data if we want to
 	if(app.logData) {
 		console.log(data);
@@ -108,9 +118,18 @@ app.showAlert = function(msg) {
 	$('#alert').show();
 };
 
-//
-app.formatAsCSV = function(data) {
-	var arr2d = $.csv.toArrays(data);
+//parse CSV
+app.parseCSV = function(data) {
+	return $.csv.toArrays(data);
+};
+
+//parse TSV
+app.parseTSV = function(data) {
+	return $.tsv.parseRows(data);
+};
+
+//expects a 2-dimensional array of data
+app.createTable = function(arr2d) {
 	$('#data').html('<table class="table" ><thead></thead><tbody></tbody></table>');
 	$('.table thead').append('<tr><tr>');
 	for (i=0; i < arr2d[0].length; i++) {
