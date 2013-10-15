@@ -2,7 +2,7 @@ var app = app || {};
 
 //global variables
 app.dataURL = null; //URL of data source
-app.interval = 2000; //update frequency in ms
+app.interval = 60*1000; //update frequency in ms
 app.running = false;
 app.logData = false;
 
@@ -13,6 +13,7 @@ app.docReady = function() {
 	$('#stopDataMonitoring').on('click', app.stopDataMonitoring);
 	$('#updateInterval').on('click', app.updateInterval);
 	$('#clearData').on('click', app.clearData);
+	$('#interval').val(app.interval/1000);
 };
 
 //update the URL of the data displayed
@@ -28,7 +29,8 @@ app.updateURL = function() {
 app.startDataMonitoring = function() {
 	$('#welcome').hide();
 	app.hideAlert();
-	app.interval = setInterval(app.loadData, app.interval);
+	app.loadData(); //run once
+	app.interval = setInterval(app.loadData, app.interval); //set interval
 	app.running = true;
 };
 
@@ -131,7 +133,7 @@ app.parseTSV = function(data) {
 //expects a 2-dimensional array of data
 app.createTable = function(arr2d) {
 	$('#data').html('<table class="table" ><thead></thead><tbody></tbody></table>');
-	$('.table thead').append('<tr><tr>');
+	$('.table thead').append('<tr></tr>');
 	for (i=0; i < arr2d[0].length; i++) {
 		$('.table thead tr').append('<th>'+arr2d[0][i]+'</th>');
 	}
