@@ -6,21 +6,25 @@ app.interval = 60*1000; //update frequency in ms
 app.running = false;
 app.logData = false;
 
-//setup event listeners
+//called when the page has loaded
 app.docReady = function() {
-	$('#updateURL').on('click', app.updateURL);
+	//setup event listeners
 	$('#startDataMonitoring').on('click', app.startDataMonitoring);
 	$('#stopDataMonitoring').on('click', app.stopDataMonitoring);
+	$('#updateURL').on('click', app.updateURL);
 	$('#updateInterval').on('click', app.updateInterval);
 	$('#clearData').on('click', app.clearData);
-	$('#plotLineGraph').on('change', app.updatePlotGraphStatus)
+	$('#data-format').on('change', app.updateOptionToPlotGraph);
+	$('#plotLineGraph').on('change', app.updatePlotGraphStatus);
+	$('#saveChanges').on('click', app.saveChanges);
+	//initialisation stuff
+	app.updateOptionToPlotGraph();
 	$('#interval').val(app.interval/1000);
 };
 
 //update the URL of the data displayed
 app.updateURL = function() {
-	app.dataURL = $('#dataURL').val();
-	console.log(app.dataURL);
+	app.dataURL = $('#dataURL').val() || app.dataURL;
 	if(app.running) {
 		app.restartInterval();
 	}
@@ -44,8 +48,10 @@ app.stopDataMonitoring = function() {
 
 //update the update interval, converting from s to ms
 app.updateInterval = function() {
-	app.interval = $('#interval').val() > 0.19 ? $('#interval').val()*1000 : 200;
-	app.restartInterval();
+	app.interval = $('#interval').val() > 1 ? $('#interval').val()*1000 : 200;
+	if(app.running) {
+		app.restartInterval();
+	}
 };
 
 //empty the pre of data
@@ -54,15 +60,35 @@ app.clearData = function() {
 };
 
 //
+app.updateOptionToPlotGraph = function() {
+	var format = $('#data-format').val();
+	var linePlotAllowed = ( format == 'csv' ) || ( format == 'tsv' ) ? true : false; 
+	if(linePlotAllowed) {
+		$('#plotLineGraph').attr('disabled', false);
+	} else {
+		$('#plotLineGraph').prop('checked', false);
+		$('#plotLineGraph').attr('disabled', true);
+	}
+};
+
+//
 app.updatePlotGraphStatus = function() {
 	app.plotGraph = $('#plotLineGraph').prop('checked');
 };
+
+//
+app.saveChanges = function() {
+	app.updateInterval();
+	app.updatePlotGraphStatus();
+	app.updateURL();
+	$('#settingsModal').modal('hide');
+}
 
 //load the data with an ajax request
 app.loadData = function() {
 	$.ajax({
 		cache: false,
-    url : app.dataURL || 'sample-data/sample.csv',
+    url : app.dataURL || 'sample-data/linegraph.csv',
     type: 'GET'
   })
   .done(app.processData)
@@ -261,9 +287,8 @@ app.plotLineGraph = function(arr2d) {
 	function crunchData(arr2d, c) {
 		var data = [];
 		for(var i=0; i < numberOfRows; i++) {
-			console.log(arr2d);
 			coord = [ parseFloat( arr2d[i+1][0] ), parseFloat( arr2d[i+1][c+1] ) ];
-			data.push(coord)
+			data.push(coord);
 		}
 		return data;
 	}
