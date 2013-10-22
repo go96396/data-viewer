@@ -4067,7 +4067,7 @@ th.visible-print, td.visible-print {
 /* =Global
 ----------------------------------------------- */
 body {
-  padding-top: 70px; }
+  padding: 70px 1.5%; }
 
 .update-url {
   max-width: 200px;

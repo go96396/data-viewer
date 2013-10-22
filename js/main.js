@@ -34,9 +34,11 @@ app.updateURL = function() {
 app.startDataMonitoring = function() {
 	$('#welcome').hide();
 	app.hideAlert();
-	app.loadData(); //run once
-	app.interval = setInterval(app.loadData, app.interval); //set interval
-	app.running = true;
+	if(!app.running) {
+		app.loadData(); //run once immediately
+		app.interval = setInterval(app.loadData, app.interval); //set interval
+		app.running = true;
+	}
 };
 
 //stop monitoring the data source

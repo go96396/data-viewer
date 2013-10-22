@@ -23,8 +23,8 @@ and Blueprint http://www.blueprintcss.org/
 
 //Styles
 body {
-	//account for nav bar fixed to top
-	padding-top: 70px;
+	//account for nav bar fixed to top w/ 70px padding top
+	padding: 70px 1.5%;
 }
 
 .update-url {
