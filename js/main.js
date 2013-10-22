@@ -56,11 +56,12 @@ app.clearData = function() {
 //
 app.updatePlotGraphStatus = function() {
 	app.plotGraph = $('#plotLineGraph').prop('checked');
-}
+};
 
 //load the data with an ajax request
 app.loadData = function() {
 	$.ajax({
+		cache: false,
     url : app.dataURL || 'sample-data/sample.csv',
     type: 'GET'
   })
@@ -184,14 +185,17 @@ app.plotLineGraph = function(arr2d) {
 	//one less than the number of columns ie the number of 'y' columns
 	var numberOfCols = arr2d[0].length-1;
 	var numberOfRows = arr2d.length-1;
-
 	for(var c=0; c < numberOfCols; c++) {
 		graph.series.push({
 			"name" : arr2d[0][c+1],
 			"data" : crunchData(arr2d, c)
 		});
-		console.log(graph);
 	}
+
+	//
+	graph.titleText = app.dataURL;
+	graph.xAxisText = arr2d[0][0];
+	graph.xAxisText = 'y axis';
 
 	//create the graph
   $('#data').highcharts({
@@ -200,15 +204,13 @@ app.plotLineGraph = function(arr2d) {
           zoomType: 'xy'
       },
       title: {
-          text: 'Height Versus Weight of 507 Individuals by Gender'
+          text: graph.titleText
       },
-      subtitle: {
-          text: 'Source: Heinz  2003'
-      },
+      subtitle: {},
       xAxis: {
           title: {
               enabled: true,
-              text: 'Height (cm)'
+              text: graph.xAxisText
           },
           startOnTick: true,
           endOnTick: true,
@@ -216,7 +218,7 @@ app.plotLineGraph = function(arr2d) {
       },
       yAxis: {
           title: {
-              text: 'Weight (kg)'
+              text: graph.yAxisText
           }
       },
       legend: {
@@ -249,7 +251,7 @@ app.plotLineGraph = function(arr2d) {
               },
               tooltip: {
                   headerFormat: '<b>{series.name}</b><br>',
-                  pointFormat: '{point.x} cm, {point.y} kg'
+                  pointFormat: '{point.x}, {point.y}'
               }
           }
       },
