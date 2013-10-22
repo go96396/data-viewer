@@ -13,6 +13,7 @@ app.docReady = function() {
 	$('#stopDataMonitoring').on('click', app.stopDataMonitoring);
 	$('#updateInterval').on('click', app.updateInterval);
 	$('#clearData').on('click', app.clearData);
+	$('#plotLineGraph').on('change', app.updatePlotGraphStatus)
 	$('#interval').val(app.interval/1000);
 };
 
@@ -52,6 +53,11 @@ app.clearData = function() {
 	$('#data').html('').hide();
 };
 
+//
+app.updatePlotGraphStatus = function() {
+	app.plotGraph = $('#plotLineGraph').prop('checked');
+}
+
 //load the data with an ajax request
 app.loadData = function() {
 	$.ajax({
@@ -70,16 +76,20 @@ app.processData = function(data) {
 	switch($('#data-format').val()) {
 		case 'csv':
 			arr2d = app.parseCSV(data);
-			app.createTable(arr2d);
 			break;
 		case 'tsv':
 			arr2d = app.parseTSV(data);
-			app.createTable(arr2d);
 			break;
 		case 'raw':
 		default: //output raw data in a <pre>
 			$('#data').html('<pre>'+data+'</pre>');
 			break;
+	}
+	//plot graph or draw table if arr2d has been populated with data
+	if(app.plotGraph && arr2d.length) {
+		app.plotLineGraph(arr2d);
+	} else if(arr2d.length) {
+		app.createTable(arr2d);
 	}
 	//make the data visible once processed
 	$('#data').show();
@@ -143,6 +153,117 @@ app.createTable = function(arr2d) {
 		for (j=0; j < arr2d[i].length; j++) {
 			$('.table tbody tr:last-of-type').append('<td>'+arr2d[i][j]+'</td>');
 		}
+	}
+};
+
+//this generates a table from the 2D array
+//NOTE: it assumes the first column to be the x values
+//			all other columns are plotted as y versus x
+app.plotLineGraph = function(arr2d) {
+	//namespace for this function
+	var graph = graph || {};
+
+	graph.title = app.dataURL || '';
+
+	graph.series = [];
+	//format data for highchart
+	//required format:
+	/*
+	series = [
+	{
+		"name" : string1,
+		"data" : arr[ [x1,y1], [x2,y2], [x3,y3], [x4,y4] ]
+	},
+	{
+		"name" : string2,
+		"data" : arr[ [x5,y5], [x6,y6], [x7,y7], [x8,y8] ]
+	}]
+	*/
+
+	//arr2d[0].length gives us the number of series of data to be plot as it is
+	//one less than the number of columns ie the number of 'y' columns
+	var numberOfCols = arr2d[0].length-1;
+	var numberOfRows = arr2d.length-1;
+
+	for(var c=0; c < numberOfCols; c++) {
+		graph.series.push({
+			"name" : arr2d[0][c+1],
+			"data" : crunchData(arr2d, c)
+		});
+		console.log(graph);
+	}
+
+	//create the graph
+  $('#data').highcharts({
+      chart: {
+          type: 'scatter',
+          zoomType: 'xy'
+      },
+      title: {
+          text: 'Height Versus Weight of 507 Individuals by Gender'
+      },
+      subtitle: {
+          text: 'Source: Heinz  2003'
+      },
+      xAxis: {
+          title: {
+              enabled: true,
+              text: 'Height (cm)'
+          },
+          startOnTick: true,
+          endOnTick: true,
+          showLastLabel: true
+      },
+      yAxis: {
+          title: {
+              text: 'Weight (kg)'
+          }
+      },
+      legend: {
+          layout: 'vertical',
+          align: 'left',
+          verticalAlign: 'top',
+          x: 100,
+          y: 70,
+          floating: true,
+          backgroundColor: '#FFFFFF',
+          borderWidth: 1
+      },
+      plotOptions: {
+          scatter: {
+              marker: {
+                  radius: 5,
+                  states: {
+                      hover: {
+                          enabled: true,
+                          lineColor: 'rgb(100,100,100)'
+                      }
+                  }
+              },
+              states: {
+                  hover: {
+                      marker: {
+                          enabled: false
+                      }
+                  }
+              },
+              tooltip: {
+                  headerFormat: '<b>{series.name}</b><br>',
+                  pointFormat: '{point.x} cm, {point.y} kg'
+              }
+          }
+      },
+      series: graph.series
+  });
+	//
+	function crunchData(arr2d, c) {
+		var data = [];
+		for(var i=0; i < numberOfRows; i++) {
+			console.log(arr2d);
+			coord = [ parseFloat( arr2d[i+1][0] ), parseFloat( arr2d[i+1][c+1] ) ];
+			data.push(coord)
+		}
+		return data;
 	}
 };
 
