@@ -11,10 +11,7 @@ app.docReady = function() {
 	//setup event listeners
 	$('#startDataMonitoring').on('click', app.startDataMonitoring);
 	$('#stopDataMonitoring').on('click', app.stopDataMonitoring);
-	$('#updateURL').on('click', app.updateURL);
-	$('#updateInterval').on('click', app.updateInterval);
-	$('#clearData').on('click', app.clearData);
-	$('#data-format').on('change', app.updateOptionToPlotGraph);
+	$('.data-format label').on('click', app.updateDataFormat);
 	$('#plotLineGraph').on('change', app.updatePlotGraphStatus);
 	$('#saveChanges').on('click', app.saveChanges);
 	//initialisation stuff
@@ -56,6 +53,18 @@ app.updateInterval = function() {
 	}
 };
 
+//
+app.updateDataFormat = function() {
+	//this requires a delay otherwise the previously selected
+	//data format is saved - some lag between button click and
+	//change in radio button state - wierd
+	setTimeout(function() {
+		app.dataFormat = $('input[name="data-format-options"]:checked').val();
+		app.updateOptionToPlotGraph()
+		console.log(app.dataFormat);
+	}, 250);
+};
+
 //empty the pre of data
 app.clearData = function() {
 	$('#data').html('').hide();
@@ -63,8 +72,7 @@ app.clearData = function() {
 
 //
 app.updateOptionToPlotGraph = function() {
-	var format = $('#data-format').val();
-	var linePlotAllowed = ( format == 'csv' ) || ( format == 'tsv' ) ? true : false;
+	var linePlotAllowed = ( app.dataFormat == 'csv' ) || ( app.dataFormat == 'tsv' ) ? true : false;
 	if(linePlotAllowed) {
 		$('#plotLineGraph').attr('disabled', false);
 	} else {
@@ -81,6 +89,7 @@ app.updatePlotGraphStatus = function() {
 //
 app.saveChanges = function() {
 	app.updateInterval();
+	app.updateDataFormat();
 	app.updatePlotGraphStatus();
 	app.updateURL();
 	$('#settingsModal').modal('hide');
@@ -102,7 +111,7 @@ app.processData = function(data) {
 	//create empty array to fill with data if needed
 	var arr2d = [];
 	//process data accordingly
-	switch($('#data-format').val()) {
+	switch(app.dataFormat) {
 		case 'csv':
 			arr2d = app.parseCSV(data);
 			break;

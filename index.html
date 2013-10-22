@@ -83,15 +83,24 @@
                     
                     <div class="form-group">
                         <label for="">Format data as:</label>
-                        <select id="data-format" class="form-control data-format">
-                            <option value="raw">Raw</option>
-                            <option value="csv">CSV</option>
-                            <option value="tsv">TSV</option>
-                        </select>
-                        <label>
-                            <input type="checkbox" id="plotLineGraph"> Plot line graph (beta feature - select CSV or TSV)
-                        </label>
+
+                        <div class="btn-group data-format clearfix" data-toggle="buttons">
+                          <label class="btn btn-primary">
+                            <input type="radio" name="data-format-options" value="raw"> Raw
+                          </label>
+                          <label class="btn btn-primary">
+                            <input type="radio" name="data-format-options" value="csv"> CSV
+                          </label>
+                          <label class="btn btn-primary">
+                            <input type="radio" name="data-format-options" value="tsv"> TSV
+                          </label>
+                        </div>
                     </div>
+
+                    <div class="form-group"></div>
+                    <label>
+                        <input type="checkbox" id="plotLineGraph"> Plot line graph (beta feature - select CSV or TSV)
+                    </label>
                 </div><!-- .modal-body -->
                 
                 <div class="modal-footer">
