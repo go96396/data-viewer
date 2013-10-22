@@ -64,7 +64,7 @@ app.clearData = function() {
 //
 app.updateOptionToPlotGraph = function() {
 	var format = $('#data-format').val();
-	var linePlotAllowed = ( format == 'csv' ) || ( format == 'tsv' ) ? true : false; 
+	var linePlotAllowed = ( format == 'csv' ) || ( format == 'tsv' ) ? true : false;
 	if(linePlotAllowed) {
 		$('#plotLineGraph').attr('disabled', false);
 	} else {
@@ -84,7 +84,7 @@ app.saveChanges = function() {
 	app.updatePlotGraphStatus();
 	app.updateURL();
 	$('#settingsModal').modal('hide');
-}
+};
 
 //load the data with an ajax request
 app.loadData = function() {
@@ -152,11 +152,10 @@ app.hideAlert = function() {
 
 //
 app.showAlert = function(msg) {
-	console.log(msg);
 	if(msg.length) {
-		$('#alert').html(msg);
+		$('#alertText').html(msg);
 	}
-	$('#alert').show();
+	$('#alertModal').modal('show')
 };
 
 //parse CSV

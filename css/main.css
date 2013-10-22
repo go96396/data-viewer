@@ -4083,9 +4083,6 @@ body {
 .data {
   display: none; }
 
-.alert {
-  display: none; }
-
 select.data-format {
   max-width: 100px; }
 
