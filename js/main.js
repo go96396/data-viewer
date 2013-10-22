@@ -47,7 +47,8 @@ app.stopDataMonitoring = function() {
 
 //update the update interval, converting from s to ms
 app.updateInterval = function() {
-	app.interval = $('#interval').val() > 1 ? $('#interval').val()*1000 : 200;
+	var interval = parseFloat($('#interval').val());
+	app.interval = interval > 1 ? interval*1000 : 200;
 	if(app.running) {
 		app.restartInterval();
 	}
