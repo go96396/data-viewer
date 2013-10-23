@@ -16,7 +16,7 @@ app.docReady = function() {
 	$('.beta-features input').on('change', app.updateBetaVars);
 	$('#saveChanges').on('click', app.saveChanges);
 	//initialisation stuff
-	app.updateOptionToPlotGraph();
+	app.updateOptionToSelectBetaFeatures();
 	$('#interval').val(app.interval/1000);
 };
 
@@ -68,7 +68,7 @@ app.updateDataFormat = function() {
 	//change in radio button state - wierd
 	setTimeout(function() {
 		app.dataFormat = $('input[name="data-format-options"]:checked').val();
-		app.updateOptionToPlotGraph();
+		app.updateOptionToSelectBetaFeatures();
 		console.log(app.dataFormat);
 	}, 250);
 };
@@ -79,13 +79,13 @@ app.clearData = function() {
 };
 
 //
-app.updateOptionToPlotGraph = function() {
-	var linePlotAllowed = ( app.dataFormat == 'csv' ) || ( app.dataFormat == 'tsv' ) ? true : false;
-	if(linePlotAllowed) {
-		$('#plotLineGraph').attr('disabled', false);
+app.updateOptionToSelectBetaFeatures = function() {
+	var betaFeatureAllowed = ( app.dataFormat == 'csv' ) || ( app.dataFormat == 'tsv' ) ? true : false;
+	if(betaFeatureAllowed) {
+		$('.beta-features input').attr('disabled', false);
 	} else {
-		$('#plotLineGraph').prop('checked', false);
-		$('#plotLineGraph').attr('disabled', true);
+		$('.beta-features input').prop('checked', false);
+		$('.beta-features input').attr('disabled', true);
 	}
 };
 
@@ -106,6 +106,7 @@ app.saveChanges = function() {
 
 //load the data with an ajax request
 app.loadData = function() {
+	app.showLoadingGif();
 	$.ajax({
 		cache: false,
     url : app.dataURL || 'sample-data/linegraph.csv',
@@ -210,6 +211,8 @@ app.createTable = function(arr2d) {
 //NOTE: it assumes the first column to be the x values
 //			all other columns are plotted as y versus x
 app.plotLineGraph = function() {
+	//show loading gif before everything is ready to display
+	app.showLoadingGif()
 	//namespace for this function
 	var graph = graph || {};
 
@@ -244,7 +247,7 @@ app.plotLineGraph = function() {
 	//
 	graph.titleText = app.dataURL;
 	graph.xAxisText = app.arr2d[0][0];
-	graph.xAxisText = 'y axis';
+	graph.xAxisText = app.arr2d[0][1];
 
 	//create the graph
   $('#data').highcharts({
@@ -283,7 +286,7 @@ app.plotLineGraph = function() {
       plotOptions: {
           scatter: {
               marker: {
-                  radius: 5,
+                  radius: 1,
                   states: {
                       hover: {
                           enabled: true,
@@ -308,6 +311,7 @@ app.plotLineGraph = function() {
   });
 	//
 	function crunchData(arr2d, c) {
+		app.showLoadingGif();
 		var data = [];
 		for(var i=0; i < numberOfRows; i++) {
 			coord = [ parseFloat( arr2d[i+1][0] ), parseFloat( arr2d[i+1][c+1] ) ];
@@ -315,6 +319,11 @@ app.plotLineGraph = function() {
 		}
 		return data;
 	}
+};
+
+//
+app.showLoadingGif = function() {
+	$('#data').html("<img src='img/loader.gif'>");
 };
 
 //
