@@ -21,6 +21,8 @@ If you have any ideas for a feature this app could benefit from [tweet me](https
 
 * a history feature in the data url selection process
 * syntax highlighting for json
+* option to refresh on click instead of periodically
+* status indicator (running or not running)
 
 ## Sample Data
 Sample data sets can be found in the `sample-data` directory. It includes:
