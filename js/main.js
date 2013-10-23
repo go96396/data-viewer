@@ -11,7 +11,7 @@ app.docReady = function() {
 	//setup event listeners
 	$('#startDataMonitoring').on('click', app.startDataMonitoring);
 	$('#stopDataMonitoring').on('click', app.stopDataMonitoring);
-	$('#loadData').on('click', app.loadData);
+	$('#loadData').on('click', app.oneOffLoad);
 	$('.data-format label').on('click', app.updateDataFormat);
 	$('.beta-features input').on('change', app.updateBetaVars);
 	$('#saveChanges').on('click', app.saveChanges);
@@ -45,6 +45,12 @@ app.stopDataMonitoring = function() {
 	$('#data').show();
 	app.running = false;
 };
+
+//
+app.oneOffLoad = function() {
+	$('#welcome').hide();
+	app.loadData();
+}
 
 //update the update interval, converting from s to ms
 app.updateInterval = function() {
@@ -376,12 +382,12 @@ app.redrawFrame = function(sim) {
 	//increment counter
 	sim.i++;
 
-	if(sim.i%10 == 0) {
+	if(sim.i%10 === 0) {
 		console.log(((sim.i/sim.dataLength)*100).toFixed(0) + "% complete");
 	}
 
-	//check to see if complete
-	if(!(sim.i < sim.dataLength)) {
+	//check to see if complete ie run out of data
+	if(sim.i > sim.dataLength) {
 		clearTimeout(sim.interval);
 	}
 };
