@@ -4086,6 +4086,9 @@ body {
 .data-format {
   display: block; }
 
+canvas {
+  margin: 0 auto; }
+
 /* =Media Queries / Responsive Styles Imports
 ----------------------------------------------- */
 /*

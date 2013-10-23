@@ -11,8 +11,9 @@ app.docReady = function() {
 	//setup event listeners
 	$('#startDataMonitoring').on('click', app.startDataMonitoring);
 	$('#stopDataMonitoring').on('click', app.stopDataMonitoring);
+	$('#loadData').on('click', app.loadData);
 	$('.data-format label').on('click', app.updateDataFormat);
-	$('#plotLineGraph').on('change', app.updatePlotGraphStatus);
+	$('.beta-features input').on('change', app.updateBetaVars);
 	$('#saveChanges').on('click', app.saveChanges);
 	//initialisation stuff
 	app.updateOptionToPlotGraph();
@@ -61,7 +62,7 @@ app.updateDataFormat = function() {
 	//change in radio button state - wierd
 	setTimeout(function() {
 		app.dataFormat = $('input[name="data-format-options"]:checked').val();
-		app.updateOptionToPlotGraph()
+		app.updateOptionToPlotGraph();
 		console.log(app.dataFormat);
 	}, 250);
 };
@@ -83,15 +84,16 @@ app.updateOptionToPlotGraph = function() {
 };
 
 //
-app.updatePlotGraphStatus = function() {
+app.updateBetaVars = function() {
 	app.plotGraph = $('#plotLineGraph').prop('checked');
+	app.simulatePendulum = $('#simulatePendulum').prop('checked');
 };
 
 //
 app.saveChanges = function() {
 	app.updateInterval();
 	app.updateDataFormat();
-	app.updatePlotGraphStatus();
+	app.updateBetaVars();
 	app.updateURL();
 	$('#settingsModal').modal('hide');
 };
@@ -124,9 +126,13 @@ app.processData = function(data) {
 			$('#data').html('<pre>'+data+'</pre>');
 			break;
 	}
+	//add data to the global namespace so it can be accessed anywhere
+	app.arr2d = arr2d;
 	//plot graph or draw table if arr2d has been populated with data
 	if(app.plotGraph && arr2d.length) {
 		app.plotLineGraph(arr2d);
+	} else if(app.simulatePendulum && arr2d.length) {
+		app.simulate(arr2d);
 	} else if(arr2d.length) {
 		app.createTable(arr2d);
 	}
@@ -165,7 +171,7 @@ app.showAlert = function(msg) {
 	if(msg.length) {
 		$('#alertText').html(msg);
 	}
-	$('#alertModal').modal('show')
+	$('#alertModal').modal('show');
 };
 
 //parse CSV
@@ -197,7 +203,7 @@ app.createTable = function(arr2d) {
 //this generates a table from the 2D array
 //NOTE: it assumes the first column to be the x values
 //			all other columns are plotted as y versus x
-app.plotLineGraph = function(arr2d) {
+app.plotLineGraph = function() {
 	//namespace for this function
 	var graph = graph || {};
 
@@ -218,20 +224,20 @@ app.plotLineGraph = function(arr2d) {
 	}]
 	*/
 
-	//arr2d[0].length gives us the number of series of data to be plot as it is
+	//app.arr2d[0].length gives us the number of series of data to be plot as it is
 	//one less than the number of columns ie the number of 'y' columns
-	var numberOfCols = arr2d[0].length-1;
-	var numberOfRows = arr2d.length-1;
+	var numberOfCols = app.arr2d[0].length-1;
+	var numberOfRows = app.arr2d.length-1;
 	for(var c=0; c < numberOfCols; c++) {
 		graph.series.push({
-			"name" : arr2d[0][c+1],
-			"data" : crunchData(arr2d, c)
+			"name" : app.arr2d[0][c+1],
+			"data" : crunchData(app.arr2d, c)
 		});
 	}
 
 	//
 	graph.titleText = app.dataURL;
-	graph.xAxisText = arr2d[0][0];
+	graph.xAxisText = app.arr2d[0][0];
 	graph.xAxisText = 'y axis';
 
 	//create the graph
@@ -303,6 +309,90 @@ app.plotLineGraph = function(arr2d) {
 		}
 		return data;
 	}
+};
+
+//
+app.simulate = function() {
+	var sim = sim || {};
+
+	sim.width = 500;
+	sim.height = 400;
+	sim.topMargin = 10;
+	sim.x = 0;
+	sim.y = 0;
+	//pendulum properties (appearance only)
+	sim.pendulumLength = 300;
+	sim.massrad = 20;
+
+	sim.dataLength = app.arr2d.length - 1;
+
+	$('#data').html('<canvas id="simulator" width="'+ sim.width +'" height="'+ sim.height +'"></canvas>');
+
+	sim.canvas = document.getElementById("simulator");
+  sim.ctx = sim.canvas.getContext("2d");
+
+  sim.i = 0;
+  sim.timeStep = 20;
+
+  sim.interval = setInterval(function() {
+  	app.redrawFrame(sim, app.arr2d);
+  }, sim.timeStep);
+};
+
+app.redrawFrame = function(sim) {
+	//clear the canvas ready to draw
+	app.clearCanvas(sim.ctx, sim.canvas)
+	//draw horzontal
+	sim.ctx.moveTo(0, sim.topMargin);
+	sim.ctx.lineTo(sim.width, sim.topMargin);
+	//draw vertical reference
+	sim.ctx.moveTo(sim.width/2, sim.topMargin);
+	sim.ctx.lineTo(sim.width/2, sim.height);
+	//draw the background in a grey
+	sim.ctx.strokeStyle = "#ccc";
+	sim.ctx.stroke();
+
+	//calculate pendulum coordinates
+	sim.theta = app.arr2d[sim.i][1];
+	sim.x = (sim.width/2) + ( sim.pendulumLength * Math.sin(sim.theta) )
+	sim.y = sim.topMargin + ( sim.pendulumLength * Math.cos(sim.theta) )
+	//draw pendulum
+	sim.ctx.moveTo(sim.width/2, sim.topMargin);
+	sim.ctx.lineTo(sim.x, sim.y);
+
+	//draw the pendulum darker
+	sim.ctx.strokeStyle = "#000";
+	sim.ctx.stroke();
+
+	//draw mass at end of pendulum
+	sim.ctx.beginPath();
+  sim.ctx.arc(sim.x, sim.y, sim.massrad, 0, 2 * Math.PI, false);
+  sim.ctx.fillStyle = 'hotpink';
+  sim.ctx.fill();
+  sim.ctx.lineWidth = 1;
+  sim.ctx.strokeStyle = '#000';
+  sim.ctx.stroke();
+
+	//increment counter
+	sim.i++;
+
+	if(sim.i%10 == 0) {
+		console.log(((sim.i/sim.dataLength)*100).toFixed(0) + "% complete");
+	}
+
+	//check to see if complete
+	if(!(sim.i < sim.dataLength)) {
+		clearTimeout(sim.interval);
+	}
+};
+
+//a handy function to clear the canvas (X-browser friendly)
+//http://stackoverflow.com/questions/2142535/how-to-clear-the-canvas-for-redrawing
+app.clearCanvas = function(context, canvas) {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  var w = canvas.width;
+  canvas.width = 1;
+  canvas.width = w;
 };
 
 /*
