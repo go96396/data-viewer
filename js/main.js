@@ -347,16 +347,18 @@ app.simulate = function() {
   sim.ctx = sim.canvas.getContext("2d");
 
   sim.i = 0;
-  sim.timeStep = 20;
+  sim.timeStep = app.arr2d[2][0];
+
+  console.log(sim.timeStep);
 
   sim.interval = setInterval(function() {
-  	app.redrawFrame(sim, app.arr2d);
+		app.redrawFrame(sim, app.arr2d);
   }, sim.timeStep);
 };
 
 app.redrawFrame = function(sim) {
 	//clear the canvas ready to draw
-	app.clearCanvas(sim.ctx, sim.canvas)
+	app.clearCanvas(sim.ctx, sim.canvas);
 	//draw horzontal
 	sim.ctx.moveTo(0, sim.topMargin);
 	sim.ctx.lineTo(sim.width, sim.topMargin);
@@ -364,7 +366,7 @@ app.redrawFrame = function(sim) {
 	sim.ctx.moveTo(sim.width/2, sim.topMargin);
 	sim.ctx.lineTo(sim.width/2, sim.height);
 	//draw the background in a grey
-	sim.ctx.strokeStyle = "#ccc";
+	sim.ctx.strokeStyle = "#ddd";
 	sim.ctx.stroke();
 
 	//calculate pendulum coordinates
@@ -392,7 +394,7 @@ app.redrawFrame = function(sim) {
   sim.ctx.font = "bold 12px sans-serif";
   sim.ctx.textAlign = "right";
 	sim.ctx.textBaseline = "bottom";
-	sim.ctx.fillText("Simulated Time: "+ (sim.timeStep*sim.i/1000).toFixed(1) +"s", 500, (sim.height - 40));
+	sim.ctx.fillText("Simulated Time: "+ (sim.timeStep*sim.i).toFixed(3) +"ms", 500, (sim.height - 40));
 	sim.ctx.fillText("Progress: "+ ((sim.i/sim.dataLength)*100).toFixed(0) +"%", 500, (sim.height - 20));
 
 	//increment counter
