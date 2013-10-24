@@ -369,8 +369,8 @@ app.redrawFrame = function(sim) {
 
 	//calculate pendulum coordinates
 	sim.theta = app.arr2d[sim.i][1];
-	sim.x = (sim.width/2) + ( sim.pendulumLength * Math.sin(sim.theta) )
-	sim.y = sim.topMargin + ( sim.pendulumLength * Math.cos(sim.theta) )
+	sim.x = (sim.width/2) + ( sim.pendulumLength * Math.sin(sim.theta) );
+	sim.y = sim.topMargin + ( sim.pendulumLength * Math.cos(sim.theta) );
 	//draw pendulum
 	sim.ctx.moveTo(sim.width/2, sim.topMargin);
 	sim.ctx.lineTo(sim.x, sim.y);
@@ -388,12 +388,15 @@ app.redrawFrame = function(sim) {
   sim.ctx.strokeStyle = '#000';
   sim.ctx.stroke();
 
+  //write the current simulated time to screen
+  sim.ctx.font = "bold 12px sans-serif";
+  sim.ctx.textAlign = "right";
+	sim.ctx.textBaseline = "bottom";
+	sim.ctx.fillText("Simulated Time: "+ (sim.timeStep*sim.i/1000).toFixed(1) +"s", 500, (sim.height - 40));
+	sim.ctx.fillText("Progress: "+ ((sim.i/sim.dataLength)*100).toFixed(0) +"%", 500, (sim.height - 20));
+
 	//increment counter
 	sim.i++;
-
-	if(sim.i%10 === 0) {
-		console.log(((sim.i/sim.dataLength)*100).toFixed(0) + "% complete");
-	}
 
 	//check to see if complete ie run out of data
 	if(sim.i > sim.dataLength) {
