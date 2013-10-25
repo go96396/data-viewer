@@ -1,10 +1,11 @@
 var app = app || {};
 
 //global variables
-app.dataURL = null; //URL of data source
+app.dataURL = 'data/single_pen.csv'; //URL of data source
 app.interval = 60*1000; //update frequency in ms
 app.running = false;
 app.logData = false;
+app.colours = ['#ffcc00', 'hotpink'];
 
 //called when the page has loaded
 app.docReady = function() {
@@ -109,7 +110,7 @@ app.loadData = function() {
 	app.showLoadingGif();
 	$.ajax({
 		cache: false,
-    url : app.dataURL || 'sample-data/linegraph.csv',
+    url : app.dataURL || 'data/single_pen.csv',
     type: 'GET'
   })
   .done(app.processData)
@@ -340,6 +341,7 @@ app.simulate = function() {
 	sim.massrad = 20;
 
 	sim.dataLength = app.arr2d.length - 1;
+	sim.numberOfPendulums = $('#numberOfPendulums').val();
 
 	$('#data').html('<canvas id="simulator" width="'+ sim.width +'" height="'+ sim.height +'"></canvas>');
 
@@ -347,7 +349,7 @@ app.simulate = function() {
   sim.ctx = sim.canvas.getContext("2d");
 
   sim.i = 0;
-  sim.timeStep = app.arr2d[2][0];
+  sim.timeStep = 20; //app.arr2d[2][0];
 
   console.log(sim.timeStep);
 
@@ -369,32 +371,20 @@ app.redrawFrame = function(sim) {
 	sim.ctx.strokeStyle = "#ddd";
 	sim.ctx.stroke();
 
-	//calculate pendulum coordinates
-	sim.theta = app.arr2d[sim.i][1];
-	sim.x = (sim.width/2) + ( sim.pendulumLength * Math.sin(sim.theta) );
-	sim.y = sim.topMargin + ( sim.pendulumLength * Math.cos(sim.theta) );
-	//draw pendulum
-	sim.ctx.moveTo(sim.width/2, sim.topMargin);
-	sim.ctx.lineTo(sim.x, sim.y);
-
-	//draw the pendulum darker
-	sim.ctx.strokeStyle = "#000";
-	sim.ctx.stroke();
-
-	//draw mass at end of pendulum
-	sim.ctx.beginPath();
-  sim.ctx.arc(sim.x, sim.y, sim.massrad, 0, 2 * Math.PI, false);
-  sim.ctx.fillStyle = 'hotpink';
-  sim.ctx.fill();
-  sim.ctx.lineWidth = 1;
-  sim.ctx.strokeStyle = '#000';
-  sim.ctx.stroke();
+	for(var c=0; c < sim.numberOfPendulums; c++) {
+		//calculate 1st pendulum coordinates
+		sim.theta = app.arr2d[sim.i][(2*c)+1];
+		sim.x = (sim.width/2) + ( sim.pendulumLength * Math.sin(sim.theta) );
+		sim.y = sim.topMargin + ( sim.pendulumLength * Math.cos(sim.theta) );
+		//draw 2nd pendulum
+		app.drawPendulum(sim);
+	}
 
   //write the current simulated time to screen
   sim.ctx.font = "bold 12px sans-serif";
   sim.ctx.textAlign = "right";
 	sim.ctx.textBaseline = "bottom";
-	sim.ctx.fillText("Simulated Time: "+ (sim.timeStep*sim.i).toFixed(3) +"ms", 500, (sim.height - 40));
+	sim.ctx.fillText("Simulated Time: "+ (app.arr2d[2][0]*sim.i).toFixed(3) +"ms", 500, (sim.height - 40));
 	sim.ctx.fillText("Progress: "+ ((sim.i/sim.dataLength)*100).toFixed(0) +"%", 500, (sim.height - 20));
 
 	//increment counter
@@ -404,6 +394,25 @@ app.redrawFrame = function(sim) {
 	if(sim.i > sim.dataLength) {
 		clearTimeout(sim.interval);
 	}
+};
+
+app.drawPendulum = function(sim) {
+	//draw pendulum
+	sim.ctx.moveTo(sim.width/2, sim.topMargin);
+	sim.ctx.lineTo(sim.x, sim.y);
+	sim.ctx.strokeStyle = '#000';
+  sim.ctx.stroke();
+
+	//draw mass at end of pendulum
+	sim.ctx.beginPath();
+  sim.ctx.arc(sim.x, sim.y, sim.massrad, 0, 2 * Math.PI, false);
+  sim.ctx.fillStyle = 'hotpink';
+  sim.ctx.fill();
+  sim.ctx.lineWidth = 1;
+
+	//draw the pendulum darker
+  sim.ctx.strokeStyle = '#000';
+  sim.ctx.stroke();
 };
 
 //a handy function to clear the canvas (X-browser friendly)
