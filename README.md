@@ -29,7 +29,7 @@ If you have any ideas for a feature this app could benefit from [tweet me](https
 
 ## Known Bugs:
 
-* typing the letter 'l' when entering the data URL causes the app to reload the data
+* ~~typing the letter 'l' when entering the data URL causes the app to reload the data~~
 
 ## Sample Data
 Sample data sets can be found in the `sample-data` directory. It includes:

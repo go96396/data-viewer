@@ -109,11 +109,14 @@ app.saveChanges = function() {
 //
 app.keyboardShortcuts = function(e) {
 	console.log(e.which);
-	switch(e.which) {
-		case 76: //'l' key
-			app.oneOffLoad();
-			break;
-	};
+	//only act on shortcut if settings modal is hidden
+	if($('#settingsModal').attr('aria-hidden') == "true") {
+		switch(e.which) {
+			case 76: //'l' key
+				app.oneOffLoad();
+				break;
+		}
+	}
 };
 
 //load the data with an ajax request
