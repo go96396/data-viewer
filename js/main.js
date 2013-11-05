@@ -1,7 +1,7 @@
 var app = app || {};
 
 //global variables
-app.dataURL = 'data/single_pen.csv'; //URL of data source
+app.dataURL = 'data/euler_single_pen.csv'; //URL of data source
 app.interval = 60*1000; //update frequency in ms
 app.running = false;
 app.logData = false;
@@ -227,7 +227,7 @@ app.createTable = function(arr2d) {
 //			all other columns are plotted as y versus x
 app.plotLineGraph = function() {
 	//show loading gif before everything is ready to display
-	app.showLoadingGif()
+	app.showLoadingGif();
 	//namespace for this function
 	var graph = graph || {};
 
@@ -262,7 +262,7 @@ app.plotLineGraph = function() {
 	//
 	graph.titleText = app.dataURL;
 	graph.xAxisText = app.arr2d[0][0];
-	graph.xAxisText = app.arr2d[0][1];
+	graph.yAxisText = app.arr2d[0][1];
 
 	//create the graph
   $('#data').highcharts({
