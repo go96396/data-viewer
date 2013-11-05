@@ -1,7 +1,7 @@
 var app = app || {};
 
 //global variables
-app.dataURL = 'data/euler_single_pen.csv'; //URL of data source
+app.dataURL = 'data/double_pen.csv'; //URL of data source
 app.interval = 60*1000; //update frequency in ms
 app.running = false;
 app.logData = false;
@@ -348,14 +348,16 @@ app.simulate = function() {
 	sim.width = 500;
 	sim.height = 400;
 	sim.topMargin = 10;
-	sim.x = 0;
-	sim.y = 0;
+	sim.p1 = [];
+	sim.p2 = [];
 	//pendulum properties (appearance only)
-	sim.pendulumLength = 300;
-	sim.massrad = 20;
+	sim.pendulumLength = 200;
+	sim.massrad = 10;
 
 	sim.dataLength = app.arr2d.length - 1;
+	sim.mode = $('#simMode').val();
 	sim.numberOfPendulums = $('#numberOfPendulums').val();
+	sim.doublePen = true;
 
 	$('#data').html('<canvas id="simulator" width="'+ sim.width +'" height="'+ sim.height +'"></canvas>');
 
@@ -385,13 +387,27 @@ app.redrawFrame = function(sim) {
 	sim.ctx.strokeStyle = "#ddd";
 	sim.ctx.stroke();
 
-	for(var c=0; c < sim.numberOfPendulums; c++) {
-		//calculate pendulum coordinates
-		sim.theta = app.arr2d[sim.i][(2*c)+1];
-		sim.x = (sim.width/2) + ( sim.pendulumLength * Math.sin(sim.theta) );
-		sim.y = sim.topMargin + ( sim.pendulumLength * Math.cos(sim.theta) );
+	if(sim.mode == "double-pen") {
+		//calculate 1st pendulum coordinates
+		sim.theta = app.arr2d[sim.i][1];
+		sim.p1[0] = (sim.width/2) + ( sim.pendulumLength * Math.sin(sim.theta) );
+		sim.p1[1] = sim.topMargin + ( sim.pendulumLength * Math.cos(sim.theta) );
+		//calculate 2nd pendulum coordinates
+		sim.psi = app.arr2d[sim.i][2];
+		sim.p2[0] = sim.p1[0] + ( sim.pendulumLength * Math.sin(sim.psi) );
+		sim.p2[1] = sim.p1[1] + ( sim.pendulumLength * Math.cos(sim.psi) );
 		//draw pendulum
-		app.drawPendulum(sim, c);
+		app.drawDoublePendulum(sim, c);
+	}
+	if(sim.mode == "single-pen") {
+		for(var c=0; c < sim.numberOfPendulums; c++) {
+			//calculate pendulum coordinates
+			sim.theta = app.arr2d[sim.i][(2*c)+1];
+			sim.p1[0] = (sim.width/2) + ( sim.pendulumLength * Math.sin(sim.theta) );
+			sim.p1[1] = sim.topMargin + ( sim.pendulumLength * Math.cos(sim.theta) );
+			//draw pendulum
+			app.drawSinglePendulum(sim, c);
+		}
 	}
 
   //write the current simulated time to screen
@@ -410,16 +426,42 @@ app.redrawFrame = function(sim) {
 	}
 };
 
-app.drawPendulum = function(sim, index) {
-	//draw pendulum
+app.drawDoublePendulum = function(sim, index) {
+
+	//draw 1st pendulum
 	sim.ctx.moveTo(sim.width/2, sim.topMargin);
-	sim.ctx.lineTo(sim.x, sim.y);
+	sim.ctx.lineTo(sim.p1[0], sim.p1[1]);
+	//draw 2nd pendulum
+	sim.ctx.moveTo(sim.width/2, sim.topMargin);
+	sim.ctx.lineTo(sim.p2[0], sim.p2[1]);
+	sim.ctx.lineWidth = 1;
 	sim.ctx.strokeStyle = '#000';
+	sim.ctx.stroke();
+
+	//draw mass at end of 1st pendulum
+	sim.ctx.beginPath();
+  sim.ctx.arc(sim.p1[0], sim.p1[1], sim.massrad, 0, 2 * Math.PI, false);
+  sim.ctx.fillStyle = '#000';
+  sim.ctx.fill();
+
+  //draw mass at end of 2nd pendulum
+	//sim.ctx.beginPath();
+  //sim.ctx.arc(sim.p1[0], sim.p1[1], sim.massrad, 0, 2 * Math.PI, false);
+  //sim.ctx.fill();
+
+  
+};
+
+app.drawSinglePendulum = function(sim, index) {
+  //draw pendulum
+  sim.ctx.moveTo(sim.width/2, sim.topMargin);
+  sim.ctx.lineTo(sim.p1[0], sim.p1[1]);
+  sim.ctx.strokeStyle = '#000';
   sim.ctx.stroke();
 
-	//draw mass at end of pendulum
-	sim.ctx.beginPath();
-  sim.ctx.arc(sim.x, sim.y, sim.massrad, 0, 2 * Math.PI, false);
+  //draw mass at end of pendulum
+  sim.ctx.beginPath();
+  sim.ctx.arc(sim.p1[0], sim.p1[1], sim.massrad, 0, 2 * Math.PI, false);
   sim.ctx.fillStyle = app.colors[index];
   sim.ctx.fill();
   sim.ctx.lineWidth = 1;
@@ -427,7 +469,7 @@ app.drawPendulum = function(sim, index) {
 	//draw the pendulum darker
   sim.ctx.strokeStyle = '#000';
   sim.ctx.stroke();
-};
+}
 
 //a handy function to clear the canvas (X-browser friendly)
 //http://stackoverflow.com/questions/2142535/how-to-clear-the-canvas-for-redrawing

@@ -138,7 +138,14 @@
                         <label>
                             <input type="checkbox" id="simulatePendulum"> Simulate pendulum (beta feature - select CSV or TSV)
                         </label>
-                        <label>Number of pendulums: <input id="numberOfPendulums" type="number" step="1" min="1" value="1"> </label>
+                        <label>
+                            Pendulum visualisation mode:
+                            <select id="simMode">
+                                <option value="single-pen">multiple single pendulums</option>
+                                <option value="double-pen">double pendulum</option>
+                            </select>
+                        </label>
+                        <label>Number of single pendulums: <input id="numberOfPendulums" type="number" step="1" min="1" value="1"> </label>
                     </div>
 
                 </div><!-- .modal-body -->

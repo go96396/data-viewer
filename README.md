@@ -17,6 +17,11 @@ To reload the data source just once, click the 'Load data once' button or use 'l
 
 **Note:** in scatter graph mode, the app assumes your first column contains the x coordinates which are mapped to each successive column intepretted as successive y coordinate series.
 
+## Currently Supports:
+
+* multiple single pendulums visualised at once
+* one double pendulum system
+
 ## Possible Features to Add:
 
 If you have any ideas for a feature this app could benefit from [tweet me](https://twitter.com/jeshuamaxey).
