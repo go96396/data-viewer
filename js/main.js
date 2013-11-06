@@ -5,7 +5,9 @@ app.dataURL = 'data/double_pen.csv'; //URL of data source
 app.interval = 60*1000; //update frequency in ms
 app.running = false;
 app.logData = false;
-app.colors = ['#ffcc00', 'hotpink'];
+//colour palletter source:
+//http://www.colourlovers.com/palette/3112897/colores_pasteles
+app.colors = ['#73BDEF', '#A8EF73', '#F0FF84', '#A78AFC', '#F975E1'];
 
 //called when the page has loaded
 app.docReady = function() {
@@ -351,7 +353,7 @@ app.simulate = function() {
 	sim.p1 = [];
 	sim.p2 = [];
 	//pendulum properties (appearance only)
-	sim.pendulumLength = 200;
+	sim.pendulumLength = 150;
 	sim.massrad = 10;
 
 	sim.dataLength = app.arr2d.length - 1;
@@ -414,6 +416,7 @@ app.redrawFrame = function(sim) {
   sim.ctx.font = "bold 12px sans-serif";
   sim.ctx.textAlign = "right";
 	sim.ctx.textBaseline = "bottom";
+	sim.ctx.fillStyle = "#000";
 	sim.ctx.fillText("Simulated Time: "+ (sim.timeStep*sim.i*1000).toFixed(3) +"s", 500, (sim.height - 40));
 	sim.ctx.fillText("Progress: "+ ((sim.i/sim.dataLength)*100).toFixed(0) +"%", 500, (sim.height - 20));
 
@@ -432,7 +435,7 @@ app.drawDoublePendulum = function(sim, index) {
 	sim.ctx.moveTo(sim.width/2, sim.topMargin);
 	sim.ctx.lineTo(sim.p1[0], sim.p1[1]);
 	//draw 2nd pendulum
-	sim.ctx.moveTo(sim.width/2, sim.topMargin);
+	sim.ctx.moveTo(sim.p1[0], sim.p1[1]);
 	sim.ctx.lineTo(sim.p2[0], sim.p2[1]);
 	sim.ctx.lineWidth = 1;
 	sim.ctx.strokeStyle = '#000';
@@ -441,15 +444,16 @@ app.drawDoublePendulum = function(sim, index) {
 	//draw mass at end of 1st pendulum
 	sim.ctx.beginPath();
   sim.ctx.arc(sim.p1[0], sim.p1[1], sim.massrad, 0, 2 * Math.PI, false);
-  sim.ctx.fillStyle = '#000';
+  sim.ctx.fillStyle = app.colors[0];
+  sim.ctx.stroke();
   sim.ctx.fill();
 
   //draw mass at end of 2nd pendulum
-	//sim.ctx.beginPath();
-  //sim.ctx.arc(sim.p1[0], sim.p1[1], sim.massrad, 0, 2 * Math.PI, false);
-  //sim.ctx.fill();
-
-  
+	sim.ctx.beginPath();
+  sim.ctx.arc(sim.p2[0], sim.p2[1], sim.massrad, 0, 2 * Math.PI, false);
+  sim.ctx.fillStyle = app.colors[1];
+  sim.ctx.stroke();
+  sim.ctx.fill();
 };
 
 app.drawSinglePendulum = function(sim, index) {
@@ -469,7 +473,7 @@ app.drawSinglePendulum = function(sim, index) {
 	//draw the pendulum darker
   sim.ctx.strokeStyle = '#000';
   sim.ctx.stroke();
-}
+};
 
 //a handy function to clear the canvas (X-browser friendly)
 //http://stackoverflow.com/questions/2142535/how-to-clear-the-canvas-for-redrawing
