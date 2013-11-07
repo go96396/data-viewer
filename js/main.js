@@ -15,6 +15,7 @@ app.docReady = function() {
 	$('#startDataMonitoring').on('click', app.startDataMonitoring);
 	$('#stopDataMonitoring').on('click', app.stopDataMonitoring);
 	$('#loadData').on('click', app.oneOffLoad);
+	$('#refreshDataFiles').on('click', app.fetchDataFiles);
 	$('.data-format label').on('click', app.updateDataFormat);
 	$('.beta-features input').on('change', app.updateBetaVars);
 	$('#saveChanges').on('click', app.saveChanges);
@@ -26,7 +27,8 @@ app.docReady = function() {
 
 //update the URL of the data displayed
 app.updateURL = function() {
-	app.dataURL = $('#dataURL').val() || app.dataURL;
+	//app.dataURL = $('#dataURL').val() || app.dataURL;
+	app.dataURL = $('#dataFiles').val();
 	if(app.running) {
 		app.restartInterval();
 	}
@@ -54,7 +56,25 @@ app.stopDataMonitoring = function() {
 app.oneOffLoad = function() {
 	$('#welcome').hide();
 	app.loadData();
-}
+};
+
+//
+app.fetchDataFiles = function() {
+	$.ajax({
+		cache: false,
+    url : 'data/data-files.csv',
+    type: 'GET'
+  })
+  .done(app.updateDataFileList);
+};
+
+app.updateDataFileList = function(data) {
+	var arr = app.parseCSV(data)[0];
+	$('#dataFiles').html('');
+	arr.forEach(function(fileName) {
+		$('#dataFiles').append('<option value="'+fileName+'" >'+fileName+'</option>');
+	});
+};
 
 //update the update interval, converting from s to ms
 app.updateInterval = function() {
@@ -349,7 +369,7 @@ app.simulate = function() {
 
 	sim.width = 500;
 	sim.height = 400;
-	sim.topMargin = 10;
+	sim.topMargin = sim.height/2;
 	sim.p1 = [];
 	sim.p2 = [];
 	//pendulum properties (appearance only)
@@ -383,7 +403,7 @@ app.redrawFrame = function(sim) {
 	sim.ctx.moveTo(0, sim.topMargin);
 	sim.ctx.lineTo(sim.width, sim.topMargin);
 	//draw vertical reference
-	sim.ctx.moveTo(sim.width/2, sim.topMargin);
+	sim.ctx.moveTo(sim.width/2, 0);
 	sim.ctx.lineTo(sim.width/2, sim.height);
 	//draw the background in a grey
 	sim.ctx.strokeStyle = "#ddd";
