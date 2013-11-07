@@ -373,7 +373,7 @@ app.simulate = function() {
 	sim.p1 = [];
 	sim.p2 = [];
 	//pendulum properties (appearance only)
-	sim.pendulumLength = 150;
+	sim.pendulumLength = sim.height / 4;
 	sim.massrad = 10;
 
 	sim.dataLength = app.arr2d.length - 1;
