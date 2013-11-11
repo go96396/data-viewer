@@ -1,7 +1,7 @@
 var app = app || {};
 
 //global variables
-app.dataURL = 'data/double_pen.csv'; //URL of data source
+app.dataURL = "./data/dp/double_pen_h=0.01_G=0_R=1.csv"; //URL of data source
 app.interval = 60*1000; //update frequency in ms
 app.running = false;
 app.logData = false;
@@ -27,7 +27,6 @@ app.docReady = function() {
 
 //update the URL of the data displayed
 app.updateURL = function() {
-	//app.dataURL = $('#dataURL').val() || app.dataURL;
 	app.dataURL = $('#dataFiles').val();
 	if(app.running) {
 		app.restartInterval();
@@ -369,6 +368,7 @@ app.simulate = function() {
 
 	sim.width = 500;
 	sim.height = 400;
+	sim.margin = 20; //added to four sides of canvas
 	sim.topMargin = sim.height/2;
 	sim.p1 = [];
 	sim.p2 = [];
@@ -381,7 +381,7 @@ app.simulate = function() {
 	sim.numberOfPendulums = $('#numberOfPendulums').val();
 	sim.doublePen = true;
 
-	$('#data').html('<canvas id="simulator" width="'+ sim.width +'" height="'+ sim.height +'"></canvas>');
+	$('#data').html('<canvas id="simulator" width="'+ (sim.width+sim.margin) +'" height="'+ (sim.height+sim.margin) +'"></canvas>');
 
 	sim.canvas = document.getElementById("simulator");
   sim.ctx = sim.canvas.getContext("2d");

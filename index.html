@@ -42,7 +42,11 @@
         </div>
 
         <div id="welcome" class="jumbotron">
-            Set me going and I'll periodically show you changes to your data
+            <h1>Hello there!</h1>
+            <hr>
+            <p class="lead">Set me going and I'll periodically show you changes to your data</p>
+            <p>It's recommended you DON'T use the automatic data refresh feature of this viewer (controled with the red and green buttons at the top) unless you know what you're doing and really need to (ie for a local install).</p>
+            <p>For the most part you should be fine selecting the data source form the settings pane, configuring the options and hitting "Load Data Once" to set the app off. To reload the data, click the button again or use the <code>l</code> key as a keyboard shortcut</p>
         </div>
 
         <!-- Used for AJAX errors only currently -->
@@ -120,7 +124,7 @@
                     
                     <div class="form-group">
                         <label for="">Format data as:</label>
-
+                        <br>
                         <div class="btn-group data-format clearfix" data-toggle="buttons">
                           <label class="btn btn-primary">
                             <input type="radio" name="data-format-options" value="raw"> Raw
@@ -132,6 +136,7 @@
                             <input type="radio" name="data-format-options" value="tsv"> TSV
                           </label>
                         </div>
+                        <small>(If raw is selected, you won't be able to plot or visualise data. Select CSV for use with sample data)</small>
                     </div>
 
                     <div class="form-group beta-features">
