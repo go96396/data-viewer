@@ -116,6 +116,7 @@ app.updateOptionToSelectBetaFeatures = function() {
 app.updateBetaVars = function() {
 	app.plotGraph = $('#plotLineGraph').prop('checked');
 	app.simulatePendulum = $('#simulatePendulum').prop('checked');
+	app.heatMap = $('#heatMap').prop('checked');
 };
 
 //
@@ -164,6 +165,9 @@ app.processData = function(data) {
 		case 'tsv':
 			arr2d = app.parseTSV(data);
 			break;
+		case 'json':
+		console.log(data);
+			break;
 		case 'raw':
 		default: //output raw data in a <pre>
 			$('#data').html('<pre>'+data+'</pre>');
@@ -176,8 +180,12 @@ app.processData = function(data) {
 		app.plotLineGraph(arr2d);
 	} else if(app.simulatePendulum && arr2d.length) {
 		app.simulate(arr2d);
+	} else if(app.heatMap) {
+		app.createHeatMap(data);
 	} else if(arr2d.length) {
 		app.createTable(arr2d);
+	} else {
+		console.warn("NO DATA :(");
 	}
 	//make the data visible once processed
 	$('#data').show();
@@ -502,6 +510,66 @@ app.clearCanvas = function(context, canvas) {
   var w = canvas.width;
   canvas.width = 1;
   canvas.width = w;
+};
+
+/*
+*	ISNER EFFECT VISUALISATIONS
+*/
+
+app.createHeatMap = function(data) {
+	console.log("create map");
+	var hm = hm || {};
+
+	hm.data = data;
+	hm.timestep = 1000;
+
+	hm.width = 550;
+	hm.height = 550;
+	hm.margin = 20; //added to four sides of canvas
+	hm.boxSize = 50;
+
+	hm.domainWidth = 50;
+	hm.domainHeight = 50;
+
+	$('#data').html('<canvas id="heatMapCanvas" width="'+ (hm.width+hm.margin) +'" height="'+ (hm.height+hm.margin) +'"></canvas>');
+
+	hm.canvas = document.getElementById("heatMapCanvas");
+  hm.ctx = hm.canvas.getContext("2d");
+
+  hm.i = 0;
+
+  hm.interval = setInterval(function() {
+		app.updateHeatMap(hm);
+  }, 100);
+};
+
+//
+app.updateHeatMap = function(hm) {
+	//
+	app.clearCanvas(hm.ctx, hm.canvas);
+	//
+	console.log(hm.i, hm.data.mesh[hm.i]);
+	//
+	for (var x =  0; x < hm.data.config.meshSize; ++x) {
+		for (var y =  0; y < hm.data.config.meshSize; ++y) {
+			app.drawDomain(hm,x,y);
+		}
+	}
+
+	//hm.ctx.rect(0, 0, hm.width/(hm.i+1), hm.height/(hm.i+1));
+	hm.ctx.stroke();
+	//last
+	hm.i++;
+	if(hm.i == hm.data.config.iterations) {
+		clearInterval(hm.interval);
+	}
+};
+
+app.drawDomain = function(hm,x,y) {
+	var mesh = hm.data.mesh[hm.i];
+	hm.ctx.fillStyle = mesh[x][y] > 0 ? "green" : "red";
+	hm.ctx.fillRect(x*hm.boxSize, y*hm.boxSize, hm.domainWidth, hm.domainHeight);
+	//hm.ctx.stroke();
 };
 
 /*

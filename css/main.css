@@ -157,10 +157,10 @@ table {
 
 @media print {
   * {
-    color: black !important;
-    text-shadow: none !important;
-    background: transparent !important;
-    box-shadow: none !important; }
+    color: #000!important;
+    text-shadow: none!important;
+    background: transparent!important;
+    box-shadow: none!important; }
 
   a, a:visited {
     text-decoration: underline; }
@@ -185,7 +185,7 @@ table {
     page-break-inside: avoid; }
 
   img {
-    max-width: 100% !important; }
+    max-width: 100%!important; }
 
   @page {
     margin: 2cm .5cm; }
@@ -201,19 +201,19 @@ table {
     display: none; }
 
   .table td, .table th {
-    background-color: white !important; }
+    background-color: #fff!important; }
 
   .btn > .caret, .dropup > .btn > .caret {
-    border-top-color: black !important; }
+    border-top-color: #000!important; }
 
   .label {
     border: 1px solid #000; }
 
   .table {
-    border-collapse: collapse !important; }
+    border-collapse: collapse!important; }
 
   .table-bordered th, .table-bordered td {
-    border: 1px solid #dddddd !important; } }
+    border: 1px solid #ddd!important; } }
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -2209,9 +2209,9 @@ button.close {
     display: none; }
 
   .nav-collapse.collapse {
-    display: block !important;
-    height: auto !important;
-    overflow: visible !important; } }
+    display: block!important;
+    height: auto!important;
+    overflow: visible!important; } }
 .navbar-btn {
   margin-top: 8px; }
 
@@ -3348,16 +3348,16 @@ a.list-group-item.active > .badge, .nav-pills > .active > a > .badge {
   clear: both; }
 
 .pull-right {
-  float: right !important; }
+  float: right!important; }
 
 .pull-left {
-  float: left !important; }
+  float: left!important; }
 
 .hide {
-  display: none !important; }
+  display: none!important; }
 
 .show {
-  display: block !important; }
+  display: block!important; }
 
 .invisible {
   visibility: hidden; }
@@ -3379,198 +3379,198 @@ a.list-group-item.active > .badge, .nav-pills > .active > a > .badge {
   @-ms-viewport {
     width: 320px; } }
 .hidden {
-  display: none !important;
-  visibility: hidden !important; }
+  display: none!important;
+  visibility: hidden!important; }
 
 .visible-sm {
-  display: block !important; }
+  display: block!important; }
 
 tr.visible-sm {
-  display: table-row !important; }
+  display: table-row!important; }
 
 th.visible-sm, td.visible-sm {
-  display: table-cell !important; }
+  display: table-cell!important; }
 
 .visible-md {
-  display: none !important; }
+  display: none!important; }
 
 tr.visible-md {
-  display: none !important; }
+  display: none!important; }
 
 th.visible-md, td.visible-md {
-  display: none !important; }
+  display: none!important; }
 
 .visible-lg {
-  display: none !important; }
+  display: none!important; }
 
 tr.visible-lg {
-  display: none !important; }
+  display: none!important; }
 
 th.visible-lg, td.visible-lg {
-  display: none !important; }
+  display: none!important; }
 
 .hidden-sm {
-  display: none !important; }
+  display: none!important; }
 
 tr.hidden-sm {
-  display: none !important; }
+  display: none!important; }
 
 th.hidden-sm, td.hidden-sm {
-  display: none !important; }
+  display: none!important; }
 
 .hidden-md {
-  display: block !important; }
+  display: block!important; }
 
 tr.hidden-md {
-  display: table-row !important; }
+  display: table-row!important; }
 
 th.hidden-md, td.hidden-md {
-  display: table-cell !important; }
+  display: table-cell!important; }
 
 .hidden-lg {
-  display: block !important; }
+  display: block!important; }
 
 tr.hidden-lg {
-  display: table-row !important; }
+  display: table-row!important; }
 
 th.hidden-lg, td.hidden-lg {
-  display: table-cell !important; }
+  display: table-cell!important; }
 
 @media (min-width: 768px) and (max-width: 991px) {
   .visible-sm {
-    display: none !important; }
+    display: none!important; }
 
   tr.visible-sm {
-    display: none !important; }
+    display: none!important; }
 
   th.visible-sm, td.visible-sm {
-    display: none !important; }
+    display: none!important; }
 
   .visible-md {
-    display: block !important; }
+    display: block!important; }
 
   tr.visible-md {
-    display: table-row !important; }
+    display: table-row!important; }
 
   th.visible-md, td.visible-md {
-    display: table-cell !important; }
+    display: table-cell!important; }
 
   .visible-lg {
-    display: none !important; }
+    display: none!important; }
 
   tr.visible-lg {
-    display: none !important; }
+    display: none!important; }
 
   th.visible-lg, td.visible-lg {
-    display: none !important; }
+    display: none!important; }
 
   .hidden-sm {
-    display: block !important; }
+    display: block!important; }
 
   tr.hidden-sm {
-    display: table-row !important; }
+    display: table-row!important; }
 
   th.hidden-sm, td.hidden-sm {
-    display: table-cell !important; }
+    display: table-cell!important; }
 
   .hidden-md {
-    display: none !important; }
+    display: none!important; }
 
   tr.hidden-md {
-    display: none !important; }
+    display: none!important; }
 
   th.hidden-md, td.hidden-md {
-    display: none !important; }
+    display: none!important; }
 
   .hidden-lg {
-    display: block !important; }
+    display: block!important; }
 
   tr.hidden-lg {
-    display: table-row !important; }
+    display: table-row!important; }
 
   th.hidden-lg, td.hidden-lg {
-    display: table-cell !important; } }
+    display: table-cell!important; } }
 @media (min-width: 992px) {
   .visible-sm {
-    display: none !important; }
+    display: none!important; }
 
   tr.visible-sm {
-    display: none !important; }
+    display: none!important; }
 
   th.visible-sm, td.visible-sm {
-    display: none !important; }
+    display: none!important; }
 
   .visible-md {
-    display: none !important; }
+    display: none!important; }
 
   tr.visible-md {
-    display: none !important; }
+    display: none!important; }
 
   th.visible-md, td.visible-md {
-    display: none !important; }
+    display: none!important; }
 
   .visible-lg {
-    display: block !important; }
+    display: block!important; }
 
   tr.visible-lg {
-    display: table-row !important; }
+    display: table-row!important; }
 
   th.visible-lg, td.visible-lg {
-    display: table-cell !important; }
+    display: table-cell!important; }
 
   .hidden-sm {
-    display: block !important; }
+    display: block!important; }
 
   tr.hidden-sm {
-    display: table-row !important; }
+    display: table-row!important; }
 
   th.hidden-sm, td.hidden-sm {
-    display: table-cell !important; }
+    display: table-cell!important; }
 
   .hidden-md {
-    display: block !important; }
+    display: block!important; }
 
   tr.hidden-md {
-    display: table-row !important; }
+    display: table-row!important; }
 
   th.hidden-md, td.hidden-md {
-    display: table-cell !important; }
+    display: table-cell!important; }
 
   .hidden-lg {
-    display: none !important; }
+    display: none!important; }
 
   tr.hidden-lg {
-    display: none !important; }
+    display: none!important; }
 
   th.hidden-lg, td.hidden-lg {
-    display: none !important; } }
+    display: none!important; } }
 .visible-print {
-  display: none !important; }
+  display: none!important; }
 
 tr.visible-print {
-  display: none !important; }
+  display: none!important; }
 
 th.visible-print, td.visible-print {
-  display: none !important; }
+  display: none!important; }
 
 @media print {
   .visible-print {
-    display: block !important; }
+    display: block!important; }
 
   tr.visible-print {
-    display: table-row !important; }
+    display: table-row!important; }
 
   th.visible-print, td.visible-print {
-    display: table-cell !important; }
+    display: table-cell!important; }
 
   .hidden-print {
-    display: none !important; }
+    display: none!important; }
 
   tr.hidden-print {
-    display: none !important; }
+    display: none!important; }
 
   th.hidden-print, td.hidden-print {
-    display: none !important; } }
+    display: none!important; } }
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url("../fonts/glyphiconshalflings-regular.eot");
@@ -4069,6 +4069,9 @@ th.visible-print, td.visible-print {
 body {
   padding: 70px 1.5%; }
 
+.tab-content {
+  padding: 10px 5px 0px; }
+
 .update-url {
   max-width: 200px;
   display: inline; }
@@ -4088,6 +4091,12 @@ body {
 
 canvas {
   margin: 0 auto; }
+
+.spinDown {
+  background: #0000ff; }
+
+.spinUp {
+  background: hotpink; }
 
 /* =Media Queries / Responsive Styles Imports
 ----------------------------------------------- */

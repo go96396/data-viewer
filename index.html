@@ -135,25 +135,44 @@
                           <label class="btn btn-primary">
                             <input type="radio" name="data-format-options" value="tsv"> TSV
                           </label>
+                          <label class="btn btn-primary">
+                            <input type="radio" name="data-format-options" value="json"> JSON
+                          </label>
                         </div>
                         <small>(If raw is selected, you won't be able to plot or visualise data. Select CSV for use with sample data)</small>
                     </div>
 
-                    <div class="form-group beta-features">
-                        <label>
-                            <input type="checkbox" id="plotLineGraph"> Plot line graph (beta feature - select CSV or TSV)
-                        </label>
-                        <label>
-                            <input type="checkbox" id="simulatePendulum"> Simulate pendulum (beta feature - select CSV or TSV)
-                        </label>
-                        <label>
-                            Pendulum visualisation mode:
-                            <select id="simMode">
-                                <option value="single-pen">multiple single pendulums</option>
-                                <option value="double-pen">double pendulum</option>
-                            </select>
-                        </label>
-                        <label>Number of single pendulums: <input id="numberOfPendulums" type="number" step="1" min="1" value="1"> </label>
+                    <ul class="nav nav-tabs">
+                      <li class="active"><a href="#pendulums" data-toggle="tab">Pendulums</a></li>
+                      <li><a href="#isner" data-toggle="tab">Isner Model</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="pendulums" class="form-group beta-features">
+                            <label>
+                                <input type="checkbox" id="plotLineGraph"> Plot line graph (beta feature - select CSV or TSV)
+                            </label>
+                            <label>
+                                <input type="checkbox" id="simulatePendulum"> Simulate pendulum (beta feature - select CSV or TSV)
+                            </label>
+                            <label>
+                                Pendulum visualisation mode:
+                                <select id="simMode">
+                                    <option value="single-pen">multiple single pendulums</option>
+                                    <option value="double-pen">double pendulum</option>
+                                </select>
+                            </label>
+                            <label>Number of single pendulums: <input id="numberOfPendulums" type="number" step="1" min="1" value="1"> </label>
+                        </div><!-- #pendulums -->
+                        <div id="isner">
+                            <div class="tab-pane active" id="pendulums" class="form-group beta-features">
+                            <label>
+                                <input type="checkbox" id="plotLineGraph"> Plot line graph (beta feature - select CSV or TSV)
+                            </label>
+                            <label>
+                                <input type="checkbox" id="heatMap"> Generate Heat Map (beta feature - requires JSON)
+                            </label>
+                        </div><!-- #isner -->
                     </div>
 
                 </div><!-- .modal-body -->

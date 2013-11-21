@@ -27,6 +27,10 @@ body {
 	padding: 70px 1.5%;
 }
 
+.tab-content {
+	padding: 10px 5px 0px;
+}
+
 .update-url {
 	max-width: 200px;
 	display: inline;
@@ -50,8 +54,18 @@ body {
 	display: block;
 }
 
+//pendulum simulation
 canvas {
 	margin: 0 auto;
+}
+
+//isner heatmap
+.spinDown {
+	background: #0000ff;
+}
+
+.spinUp {
+	background: hotpink;
 }
 
 /* =Media Queries / Responsive Styles Imports
