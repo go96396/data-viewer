@@ -330,7 +330,7 @@ app.plotLineGraph = function() {
       plotOptions: {
           scatter: {
               marker: {
-                  radius: 1,
+                  radius: 3,
                   states: {
                       hover: {
                           enabled: true,
@@ -351,6 +351,7 @@ app.plotLineGraph = function() {
               }
           }
       },
+      colors : ['hotpink', 'blue'],
       series: graph.series
   });
 	//
